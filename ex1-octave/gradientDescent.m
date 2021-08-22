@@ -17,11 +17,12 @@ for iter = 1:num_iters
     %       of the cost function (computeCost) and gradient here.
     %
 
+    temp_theta = []
+    for j = 1:length(theta)
+      temp_theta(j) = theta(j) - alpha * (1/ m) * sum(((theta' * X')' - y) .* X(:, j))
+    end
 
-
-
-
-
+    theta = temp_theta'
 
     % ============================================================
 
