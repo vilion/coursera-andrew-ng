@@ -30,6 +30,10 @@ X = [ones(m, 1) X];
 %       for each row.
 %       
 
+pArray = []
+for ii = 1:num_labels
+  pArray(ii) = sigmoid(all_theta(ii, :), X)
+end
 
 
 
