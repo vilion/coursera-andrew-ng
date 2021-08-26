@@ -30,15 +30,14 @@ X = [ones(m, 1) X];
 %       for each row.
 %       
 
-pArray = []
-for ii = 1:num_labels
-  pArray(ii) = sigmoid(all_theta(ii, :), X)
+for ii = 1:m
+  pArray = []
+  for jj = 1:num_labels
+    pArray(jj) = sigmoid(X(ii, :) * all_theta(jj, :)')
+  end
+  [pmax, maxInd] = max(pArray, [], 2)
+  p(ii) = maxInd
 end
-
-
-
-
-
 
 % =========================================================================
 
