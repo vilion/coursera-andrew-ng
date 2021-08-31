@@ -42,19 +42,30 @@ Theta2_grad = zeros(size(Theta2));
 X = [ones(m, 1) X];
 
 J_temp = []
+grad2 = zeros(size(Theta2))
+grad1 = zeros(size(Theta1))
 
 for ii = 1:m
-  layer1 = sigmoid(X(ii, :) * Theta1')
-  layer1 = [1 layer1];
-  layer2 = sigmoid(layer1 * Theta2')
+  layer2 = sigmoid(X(ii, :) * Theta1')
+  layer2 = [1 layer2]
+  layer3 = sigmoid(layer2 * Theta2')
 
   y_temp = zeros(num_labels, 1)
   y_temp(y(ii)) = 1
-  J_temp(ii) = sum(-y_temp' .* log(layer2) - (1-y_temp)'.*log(1-layer2))
+  J_temp(ii) = sum(-y_temp' .* log(layer3) - (1-y_temp)'.*log(1-layer3))
 
+  delta_3 = layer3' - y_temp
+
+  delta_2 = (Theta2' * delta_3)' .* sigmoidGradient(layer2)
+
+  grad2 = grad2 + delta_3 * layer2
+  grad1 = grad1 + delta_2(2:end)' * X(ii, :)
+  
 end
 
-J = (1/m) * sum(J_temp) + (lambda / (2*m)) * (sum([zeros(hidden_layer_size, 1) Theta1(:, 2:input_layer_size + 1).^2](:)) + sum(Theta2(:).^2))
+J = (1/m) * sum(J_temp) + (lambda / (2*m)) * (sum([zeros(hidden_layer_size, 1) Theta1(:, 2:input_layer_size + 1).^2](:)) + sum([Theta2(:, 2:hidden_layer_size+1)](:).^2))
+Theta1_grad = (1/m) * grad1
+Theta2_grad = (1/m) * grad2
 
 %
 % Part 2: Implement the backpropagation algorithm to compute the gradients
